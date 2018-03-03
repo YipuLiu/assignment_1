@@ -250,10 +250,13 @@ console.log(organizations[0]);
 		
 		var y_3 = obj.getElementsByClassName('third_n');
 		var tn_3 = document.getElementsByClassName('third_cal')[0].innerText;
-		if (third_d[y_3[0].innerText] == 0) {
-			document.getElementsByClassName('third_cal')[0].innerText = tn_3 - 1;
+		if (y_3[0].innerText.toString() in third_a) {
+			var index = array.indexOf(y_3[0].innerText.toString());
+			if (index > -1) {
+    			third_a.splice(index, 1);
+			}
 		} else {
-			third_d[y_3[0].innerText] -= 1;
+			document.getElementsByClassName('third_cal')[0].innerText = tn_3 - 1;
 		}
 		
 		var tn_4 = document.getElementsByClassName('fourth_cal')[0].innerText;
@@ -262,11 +265,21 @@ console.log(organizations[0]);
 		obj.style.display = 'none';
 	}
 	
+	function unique(a) {
+		var arr = [];
+    	for(var i = 0; i < a.length; i++) {
+        	if(!(a[i]) in arr) {
+            	arr.push(a[i]);
+        	}
+    	}
+    	return arr; 
+	}
+	
 	var text = '';
 	var first_c = 0;
 	var second_c = 0;
 	var third_c = 0;
-	var third_d = {};
+	var third_a = [];
 	var fourth_c = 0;
 	for (var x in organizations) {
 		if (organizations.hasOwnProperty(x)) {
@@ -289,17 +302,15 @@ console.log(organizations[0]);
 			
 			second_c += 1;
 			
-			if (obj['Country'] in third_d) {
-				third_d[obj['Country']] += 1;
-			} else {
-				third_d[obj['Country']] = 1;
-			}
+			third_a.push(obj['Country']);
 			
 			fourth_c += 1;
 		}
 	}
-		
-	third_c = Object.keys(third_d).length;
+	var filteredArray = third_a.filter(function(item, pos){
+  		return third_a.indexOf(item)== pos; 
+	});
+	third_c = filteredArray.length;
 	text += "<tr><td colspan='4'>The number of organizations founded after 2000: </td><td align='center' class='first_cal'>" + first_c + "</td></tr>";
 	text += "<tr><td colspan='4'>The total number of organizations: </td><td align='center' class='second_cal'>" + second_c + "</td></tr>";
 	text += "<tr><td colspan='4'>The number of unique countries: </td><td align='center' class='third_cal'>" + third_c + "</td></tr>";
